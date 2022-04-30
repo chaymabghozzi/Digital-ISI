@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1056j3y" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:collaboration id="Collaboration_0ikunql">
+    <bpmn:participant id="Participant_0o1o5j5" name="Demande d&#39;un document" processRef="DemandeDocument" />
+  </bpmn:collaboration>
+  <bpmn:process id="DemandeDocument" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_0pu53cj">
+      <bpmn:lane id="Lane_0uzt2ys" name="Professeur">
+        <bpmn:flowNodeRef>Demandedocument</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_0i5kds6" name="Agent d&#39;administration">
+        <bpmn:flowNodeRef>Mail</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1vpvbei</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>VerifierDemande</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>PreparerDocument</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="Demandedocument" name="Demande d&#39;un document" camunda:formRef="Form_0favjus" camunda:formRefBinding="latest">
+      <bpmn:outgoing>Flow_0s8cgqe</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0s8cgqe" sourceRef="Demandedocument" targetRef="PreparerDocument" />
+    <bpmn:sequenceFlow id="Flow_0wbgppp" sourceRef="Mail" targetRef="Event_1vpvbei" />
+    <bpmn:serviceTask id="Mail" name="Envoyer un mail contient le document">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://localhost:8095/sendMailAtt</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"to":${to},"subject":${subject},"body":${body},"attachment":${attachment}}</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map />
+            </camunda:inputParameter>
+            <camunda:outputParameter name="responseBody">${response}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0x24wdr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wbgppp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1vpvbei">
+      <bpmn:incoming>Flow_0wbgppp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="VerifierDemande" name="Vérifier demande" camunda:formRef="field_0pmhkra" camunda:formRefBinding="latest" camunda:candidateUsers="chaimabenghozzi" />
+    <bpmn:sequenceFlow id="Flow_0x24wdr" sourceRef="PreparerDocument" targetRef="Mail" />
+    <bpmn:userTask id="PreparerDocument" name="Préparer document" camunda:candidateUsers="chirazgharsallah">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="subject" label="Subject" type="string" />
+          <camunda:formField id="body" label="Body:" type="string" />
+          <camunda:formField id="to" label="To:" type="string" />
+          <camunda:formField id="attachment" label="Attachment" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0s8cgqe</bpmn:incoming>
+      <bpmn:outgoing>Flow_0x24wdr</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0ikunql">
+      <bpmndi:BPMNShape id="Participant_0o1o5j5_di" bpmnElement="Participant_0o1o5j5" isHorizontal="true">
+        <dc:Bounds x="129" y="40" width="901" height="500" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0i5kds6_di" bpmnElement="Lane_0i5kds6" isHorizontal="true">
+        <dc:Bounds x="159" y="230" width="871" height="310" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0uzt2ys_di" bpmnElement="Lane_0uzt2ys" isHorizontal="true">
+        <dc:Bounds x="159" y="40" width="871" height="190" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0x24wdr_di" bpmnElement="Flow_0x24wdr">
+        <di:waypoint x="570" y="360" />
+        <di:waypoint x="700" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wbgppp_di" bpmnElement="Flow_0wbgppp">
+        <di:waypoint x="800" y="360" />
+        <di:waypoint x="882" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0s8cgqe_di" bpmnElement="Flow_0s8cgqe">
+        <di:waypoint x="230" y="138" />
+        <di:waypoint x="230" y="360" />
+        <di:waypoint x="470" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="Demandedocument">
+        <dc:Bounds x="212" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="254" y="115.5" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08n0mvr_di" bpmnElement="Mail">
+        <dc:Bounds x="700" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vpvbei_di" bpmnElement="Event_1vpvbei">
+        <dc:Bounds x="882" y="342" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0w8ud7x_di" bpmnElement="VerifierDemande">
+        <dc:Bounds x="280" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e65iex_di" bpmnElement="PreparerDocument">
+        <dc:Bounds x="470" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

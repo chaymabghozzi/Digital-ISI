@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0i3qkqq" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+  <bpmn:process id="Process_0tygbty" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0tll0v8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0tll0v8" sourceRef="StartEvent_1" targetRef="Activity_1e65iex" />
+    <bpmn:endEvent id="Event_1j4xaem">
+      <bpmn:incoming>Flow_0ufz0om</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0ufz0om" sourceRef="Activity_08n0mvr" targetRef="Event_1j4xaem" />
+    <bpmn:serviceTask id="Activity_08n0mvr" name="mail">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://localhost:8095/sendMail</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"to":${to},"subject":${subject},"body":${body}}</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map />
+            </camunda:inputParameter>
+            <camunda:outputParameter name="responseBody">${response}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cqrr45</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ufz0om</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1cqrr45" sourceRef="Activity_1e65iex" targetRef="Activity_08n0mvr" />
+    <bpmn:userTask id="Activity_1e65iex" name="utask">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="subject" type="string" />
+          <camunda:formField id="body" type="string" />
+          <camunda:formField id="to" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tll0v8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cqrr45</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0tygbty">
+      <bpmndi:BPMNEdge id="Flow_0tll0v8_di" bpmnElement="Flow_0tll0v8">
+        <di:waypoint x="215" y="127" />
+        <di:waypoint x="300" y="127" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ufz0om_di" bpmnElement="Flow_0ufz0om">
+        <di:waypoint x="580" y="100" />
+        <di:waypoint x="580" y="80" />
+        <di:waypoint x="730" y="80" />
+        <di:waypoint x="730" y="102" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cqrr45_di" bpmnElement="Flow_1cqrr45">
+        <di:waypoint x="400" y="127" />
+        <di:waypoint x="470" y="127" />
+        <di:waypoint x="470" y="140" />
+        <di:waypoint x="530" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="109" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1j4xaem_di" bpmnElement="Event_1j4xaem">
+        <dc:Bounds x="712" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mhtn8k_di" bpmnElement="Activity_08n0mvr">
+        <dc:Bounds x="530" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qb8n51_di" bpmnElement="Activity_1e65iex">
+        <dc:Bounds x="300" y="87" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
